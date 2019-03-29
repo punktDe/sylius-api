@@ -1,0 +1,11 @@
+PunktDe:
+  Sylius:
+    Api:
+      clientId: ''
+      clientSecret: ''
+      apiUser: ''
+      apiPassword: ''
+      baseUri: ''
+      defaults:
+        channel: default
+        locale: de_DE

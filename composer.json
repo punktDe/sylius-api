@@ -1,0 +1,29 @@
+{
+    "description": "Sylius Admin API Client for the Flow Framework",
+    "type": "neos-package",
+    "name": "punktde/sylius-api",
+    "license": "MIT",
+    "keywords": [
+        "Sylius",
+        "Shop",
+        "Api",
+        "Neos",
+        "Flow Framework"
+    ],
+    "require": {
+        "neos/flow": "^5.0",
+        "sainsburys/guzzle-oauth2-plugin": "*",
+        "symfony/serializer": ">=3.0",
+        "symfony/property-access": "^4.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "PunktDe\\Sylius\\Api\\": "Classes/"
+        }
+    },
+    "extra": {
+        "neos": {
+            "package-key": "PunktDe.Sylius.Api"
+        }
+    }
+}
