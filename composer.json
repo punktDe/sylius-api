@@ -12,6 +12,7 @@
     ],
     "require": {
         "neos/flow": "^5.0",
+        "punktde/polyfill-logenvironment": "^1.0",
         "sainsburys/guzzle-oauth2-plugin": "*",
         "symfony/serializer": ">=3.0",
         "symfony/property-access": "^4.1"

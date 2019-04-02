@@ -6,20 +6,20 @@ namespace PunktDe\Sylius\Api\Resource;
  *  All rights reserved.
  */
 
-use GuzzleHttp\Exception\ClientException;
 use Neos\Flow\Annotations as Flow;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Promise\PromiseInterface;
 use Neos\Flow\Log\PsrSystemLoggerInterface;
 use Neos\Flow\ResourceManagement\Exception as ResourceManagementException;
 use Neos\Utility\Files;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LogLevel;
+use PunktDe\Polyfill\LogEnvironment\Utility\LogEnvironment;
 use PunktDe\Sylius\Api\Client;
 use PunktDe\Sylius\Api\Dto\ApiDtoInterface;
 use PunktDe\Sylius\Api\Dto\FileTransferringInterface;
 use PunktDe\Sylius\Api\Exception\SyliusApiException;
 use PunktDe\Sylius\Api\ResultCollection;
-use PunktDe\Vvw\NeosHotfixes\Utility\LogEnvironment;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
@@ -351,7 +351,7 @@ abstract class AbstractResource
                     $debugData['request'] = $this->convertDtoToArray($requestDto, $this->getPostFields());
                 }
 
-                $this->logger->warning(sprintf('Sylius API Request for %s did not succeed. Status: %s Message %s', get_class($this), $response->getStatusCode(), $response->getBody()->getContents()), $debugData);
+                $this->logger->warning(sprintf('Sylius API Request for %s did not succeed. Status: %s Message %s', get_class($this), $response->getStatusCode(), $response->getBody()->getContents()), array_merge($debugData, LogEnvironment::fromMethodName(__METHOD__)));
                 return null;
             }
             return $this->serializer->deserialize((string)$response->getBody(), $this->getDtoClass(), 'json');
