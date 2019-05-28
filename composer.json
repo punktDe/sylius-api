@@ -1,5 +1,5 @@
 {
-    "description": "Sylius Admin API Client for the Flow Framework",
+    "description": "Sylius Shop Admin API Client for the Flow Framework",
     "type": "neos-package",
     "name": "punktde/sylius-api",
     "license": "MIT",
