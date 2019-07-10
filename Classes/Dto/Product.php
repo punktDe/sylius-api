@@ -129,7 +129,8 @@ class Product implements ApiDtoInterface, FileTransferringInterface
      */
     public function getName(string $locale = ''): string
     {
-        return $this->translations[$locale ?: $this->defaultLocale]['name'];
+        $effectiveLocale = $locale ?: $this->defaultLocale;
+        return $this->translations[$effectiveLocale]['name'] ?? '-- Product name not set for locale ' . $effectiveLocale . ' --';
     }
 
     /**
