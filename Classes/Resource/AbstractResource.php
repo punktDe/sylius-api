@@ -163,11 +163,12 @@ abstract class AbstractResource
      *   <fieldName> => <direction>
      * ]
      *
+     * @param string $parentResourceIdentifier
      * @return ResultCollection
      */
-    public function getAll(array $criteria = [], int $limit = 100, array $sorting = []): ResultCollection
+    public function getAll(array $criteria = [], int $limit = 100, array $sorting = [], string $parentResourceIdentifier = ''): ResultCollection
     {
-        return $this->getAllAsync($criteria, $limit, $sorting)->wait();
+        return $this->getAllAsync($criteria, $limit, $sorting, $parentResourceIdentifier)->wait();
     }
 
     /**
@@ -176,7 +177,7 @@ abstract class AbstractResource
      * @param string[] $sorting
      * @return PromiseInterface
      */
-    protected function getAllAsync(array $criteria, int $limit, array $sorting): PromiseInterface
+    protected function getAllAsync(array $criteria, int $limit, array $sorting, string $parentResourceIdentifier = ''): PromiseInterface
     {
         $queryParameters = [];
         $queryParameters['limit'] = (string)$limit;
@@ -192,7 +193,7 @@ abstract class AbstractResource
             ];
         }
 
-        return $this->apiClient->getAsync($this->getResourceUri(), $queryParameters)->then($this->responseToCollection());
+        return $this->apiClient->getAsync($this->getResourceUri($parentResourceIdentifier), $queryParameters)->then($this->responseToCollection());
     }
 
     /**
@@ -329,6 +330,7 @@ abstract class AbstractResource
             }
 
             foreach ($responseArray['_embedded']['items'] as $itemData) {
+
                 $resultCollection->add($this->serializer->denormalize($itemData, $this->getDtoClass()));
             }
 
