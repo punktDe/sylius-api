@@ -7,6 +7,9 @@ namespace PunktDe\Sylius\Api\Dto;
  */
 
 use Neos\Flow\ResourceManagement\PersistentResource;
+use PunktDe\Sylius\Api\Exception\SyliusApiException;
+use PunktDe\Sylius\Api\Resource\ProductVariantResource;
+use PunktDe\Sylius\Api\ResultCollection;
 use PunktDe\Sylius\Api\Service\DefaultConfiguration;
 
 class Product implements ApiDtoInterface, FileTransferringInterface
@@ -55,6 +58,18 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     {
         $defaultConfiguration = new DefaultConfiguration();
         $this->defaultLocale = $defaultConfiguration->getDefaultLocale();
+    }
+
+    /**
+     * @param array $criteria
+     * @param int $limit
+     * @param array $sorting
+     * @return ResultCollection
+     * @throws SyliusApiException
+     */
+    public function getVariants(array $criteria = [], int $limit = 100, array $sorting = []): ResultCollection
+    {
+        return (new ProductVariantResource())->getAll($criteria, $limit, $sorting, $this->getIdentifier());
     }
 
     /**
@@ -130,7 +145,7 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     public function getName(string $locale = ''): string
     {
         $effectiveLocale = $locale ?: $this->defaultLocale;
-        return $this->translations[$effectiveLocale]['name'] ?? '-- Product name not set for locale ' . $effectiveLocale . ' --';
+        return $this->translations[$effectiveLocale]['name'] ?? '--Product not named in locale' . $effectiveLocale;
     }
 
     /**

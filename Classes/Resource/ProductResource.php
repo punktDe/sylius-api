@@ -8,11 +8,11 @@ namespace PunktDe\Sylius\Api\Resource;
  *  All rights reserved.
  */
 
+use PunktDe\Sylius\Api\Dto\ApiDtoInterface;
 use PunktDe\Sylius\Api\Dto\Product;
 
 class ProductResource extends AbstractResource
 {
-
     /**
      * Returns the fields that should be sent when creating
      * a new entity.
