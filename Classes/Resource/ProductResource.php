@@ -10,6 +10,7 @@ namespace PunktDe\Sylius\Api\Resource;
 
 use PunktDe\Sylius\Api\Dto\ApiDtoInterface;
 use PunktDe\Sylius\Api\Dto\Product;
+use PunktDe\Sylius\Api\ResultCollection;
 
 class ProductResource extends AbstractResource
 {
