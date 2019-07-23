@@ -132,8 +132,7 @@ class Client
      */
     public function getAsync(string $url, array $queryParameters = []): PromiseInterface
     {
-        $result = $this->httpClient->requestAsync('GET', $url, ['query' => $queryParameters]);
-        return $result;
+        return $this->httpClient->requestAsync('GET', $url, ['query' => $queryParameters]);
     }
 
     /**
