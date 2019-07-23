@@ -33,7 +33,7 @@ class ProductVariant implements ApiDtoInterface
     protected $taxCategory = '';
 
     /**
-     * @var string[][]
+     * @var int[][]
      */
     protected $channelPricings = [];
 
@@ -121,11 +121,11 @@ class ProductVariant implements ApiDtoInterface
 
     /**
      * @param null|string $channel
-     * @return string
+     * @return int
      */
-    public function getPrice(?string $channel = null): string
+    public function getPrice(?string $channel = null): int
     {
-        return $this->channelPricings[$channel ?? $this->defaultChannel]['price'];
+        return (int)$this->channelPricings[$channel ?? $this->defaultChannel]['price'];
     }
 
     /**
