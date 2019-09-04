@@ -61,18 +61,6 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     }
 
     /**
-     * @param array $criteria
-     * @param int $limit
-     * @param array $sorting
-     * @return ResultCollection
-     * @throws SyliusApiException
-     */
-    public function getVariants(array $criteria = [], int $limit = 100, array $sorting = []): ResultCollection
-    {
-        return (new ProductVariantResource())->getAll($criteria, $limit, $sorting, $this->getIdentifier());
-    }
-
-    /**
      * @return string
      */
     public function getCode(): string

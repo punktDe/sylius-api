@@ -10,6 +10,7 @@ namespace PunktDe\Sylius\Api\Resource;
 
 use GuzzleHttp\Promise\PromiseInterface;
 use PunktDe\Sylius\Api\Dto\ApiDtoInterface;
+use PunktDe\Sylius\Api\Dto\Product;
 use PunktDe\Sylius\Api\Dto\ProductVariant;
 use PunktDe\Sylius\Api\Exception\SyliusApiException;
 use PunktDe\Sylius\Api\ResultCollection;
@@ -23,20 +24,15 @@ class ProductVariantResource extends AbstractResource
 
 
     /**
+     * @param Product $product
      * @param array $criteria
      * @param int $limit
      * @param array $sorting
-     * @param string $parentResourceIdentifier
      * @return ResultCollection
-     * @throws SyliusApiException
      */
-    public function getAll(array $criteria = [], int $limit = 100, array $sorting = [], string $parentResourceIdentifier = ''): ResultCollection
+    public function getAllByProduct(Product $product, array $criteria = [], int $limit = 100, array $sorting = []):ResultCollection
     {
-        if ($parentResourceIdentifier === '') {
-            throw new SyliusApiException('The parentResourceIdentifier needs to be given to get all variants of a product', 1563788213);
-        }
-
-        return parent::getAll($criteria, $limit, $sorting, $parentResourceIdentifier);
+        return parent::getAll($criteria, $limit, $sorting, $product->getIdentifier());
     }
 
     /**
