@@ -20,6 +20,11 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     protected $code;
 
     /**
+    * @var string[]
+    */
+    protected $options = [];
+
+    /**
      * @var string[]
      */
     protected $translations = [];
@@ -78,6 +83,14 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     public function getCode(): string
     {
         return $this->code;
+    }
+
+    /**
+    * @return string[]
+    */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 
     /**
