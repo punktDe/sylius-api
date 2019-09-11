@@ -28,6 +28,11 @@ class ProductVariant implements ApiDtoInterface
     protected $onHand = 0;
 
     /**
+     * @var string[]
+     */
+    protected $optionValues = [];
+
+    /**
      * @var string
      */
     protected $taxCategory = '';
@@ -169,6 +174,14 @@ class ProductVariant implements ApiDtoInterface
     public function getOnHand(): int
     {
         return $this->onHand;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getOptionValues(): array
+    {
+        return $this->optionValues;
     }
 
     /**
