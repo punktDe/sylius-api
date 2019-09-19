@@ -122,7 +122,10 @@ class Client
      */
     public function putAsync(string $url, array $body): PromiseInterface
     {
-        return $this->httpClient->requestAsync('PUT', $url, ['json' => $body]);
+        return $this->httpClient->requestAsync('PUT', $url, ['body' => json_encode($body), 'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+        ]);
     }
 
     /**
