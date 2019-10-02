@@ -113,7 +113,7 @@ class Checkout implements ApiDtoInterface
      */
     public function setNotes(string $euustid, string $pubkey, string $comment): Checkout
     {
-        $this->notes = "Die EU-UstID lautet ${euustid}.\n Der Public Key lautet: \n\n ${pubkey} \n\n. \n Zur BEstellung wurde folgender Kommentar abgegeben: \n ${comment} \n.";
+        $this->notes = "Die EU-UstID lautet ${euustid}.\n Der Public Key lautet: \n\n ${pubkey} \n\n. \n Zur Bestellung wurde folgender Kommentar abgegeben: \n ${comment} \n.";
         return $this;
     }
 
