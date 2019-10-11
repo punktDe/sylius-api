@@ -106,14 +106,12 @@ class Checkout implements ApiDtoInterface
     }
 
     /**
-     * @param string $euustid
-     * @param string $pubkey
-     * @param string $comment
+     * @param string $notes
      * @return Checkout
      */
-    public function setNotes(string $euustid, string $pubkey, string $comment): Checkout
+    public function setNotes(string $notes): Checkout
     {
-        $this->notes = "Die EU-UstID lautet ${euustid}.\n Der Public Key lautet: \n\n ${pubkey} \n\n. \n Zur Bestellung wurde folgender Kommentar abgegeben: \n ${comment} \n.";
+        $this->notes = $notes;
         return $this;
     }
 
