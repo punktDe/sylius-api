@@ -175,6 +175,7 @@ abstract class AbstractResource
      * @param string[] $criteria
      * @param int $limit
      * @param string[] $sorting
+     * @param string $parentResourceIdentifier
      * @return PromiseInterface
      */
     protected function getAllAsync(array $criteria, int $limit, array $sorting, string $parentResourceIdentifier = ''): PromiseInterface
