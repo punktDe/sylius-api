@@ -8,7 +8,7 @@ namespace PunktDe\Sylius\Api\Resource;
  *  All rights reserved.
  */
 
-use PunktDe\Sylius\Api\Dto\AdminUser;
+use PunktDe\Sylius\Api\Dto\User;
 
 class UserResource extends AbstractResource
 {
@@ -51,6 +51,6 @@ class UserResource extends AbstractResource
      */
     protected function getDtoClass(): string
     {
-        return AdminUser::class;
+        return User::class;
     }
 }
