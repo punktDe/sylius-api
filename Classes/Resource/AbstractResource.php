@@ -282,6 +282,7 @@ abstract class AbstractResource
      * @param array $propertyDefinition
      * @return mixed[]
      * @throws SyliusApiException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     protected function convertDtoToArray(ApiDtoInterface $dto, array $propertyDefinition): array
     {
