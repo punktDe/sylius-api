@@ -11,9 +11,11 @@ namespace PunktDe\Sylius\Api\Command;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Cli\CommandController;
 use Neos\Flow\ObjectManagement\ObjectManager;
+use Neos\Flow\Reflection\ReflectionService;
 use PunktDe\Sylius\Api\Client;
 use PunktDe\Sylius\Api\Exception\SyliusApiConfigurationException;
-use PunktDe\Sylius\Api\Resource\AdminUserResource;
+use PunktDe\Sylius\Api\Resource\AbstractResource;
+use PunktDe\Sylius\Api\Resource\UserResource;
 use PunktDe\Sylius\Api\Resource\ProductResource;
 
 class SyliusCommandController extends CommandController
@@ -25,34 +27,38 @@ class SyliusCommandController extends CommandController
     protected $objectManager;
 
     /**
-     * @var string
-     * @Flow\InjectConfiguration(path="apiUser")
+     * @Flow\Inject
+     * @var ReflectionService
      */
-    protected $apiUserName;
+    protected $reflectionService;
 
     public function testCommand()
     {
         $this->outputLine('<b>Testing Sylius Admin API</b>');
 
         try {
-            $this->output('Testing if the API is properly configured ... ');
+            $this->output(str_pad('Testing if the API is properly configured ... ', 50, ' '));
             $client = $this->objectManager->get(Client::class);
             $this->outputLine('<success>OK</success>');
         } catch (SyliusApiConfigurationException $exception) {
             $this->outputLine('<failed>FAILED</failed> (' . $exception->getMessage() . ')');
         }
 
-        try {
-            $this->output('Testing Login and API user ... ');
-            $adminUser = $this->objectManager->get(AdminUserResource::class)->get($this->apiUserName);
-            $this->outputLine('Found User %s <success>OK</success>', [$adminUser->getIdentifier()]);
-        } catch (\Exception $exception) {
-            $this->outputLine('<error>FAILED</error> (' . str_replace("\n", '', $exception->getMessage()) . ')');
+        $resourceClasses = $this->reflectionService->getAllSubClassNamesForClass(AbstractResource::class);
+
+        foreach ($resourceClasses as $resourceClass) {
+
+            $arrayParts = explode('\\', $resourceClass);
+            $resourceName = array_pop($arrayParts);
+
+            try {
+                $message = sprintf('Testing %s API ... ', $resourceName);
+                $this->output(str_pad($message, 50, ' '));
+                $adminUser = $this->objectManager->get($resourceClass)->getAll();
+                $this->outputLine('<success>OK</success> Found %s items', [$adminUser->count()]);
+            } catch (\Exception $exception) {
+                $this->outputLine('<error>FAILED</error> (' . str_replace("\n", '', $exception->getMessage()) . ')');
+            }
         }
-
-//        $this->output('Testing Products API ... ');
-//        $productCollection = $this->productResource->getAll();
-//        $this->outputLine('found ' . (string)$productCollection->count() . ' products. <green>OK</green>');
     }
-
 }

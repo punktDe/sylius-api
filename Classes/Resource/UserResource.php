@@ -10,7 +10,7 @@ namespace PunktDe\Sylius\Api\Resource;
 
 use PunktDe\Sylius\Api\Dto\AdminUser;
 
-class AdminUserResource extends AbstractResource
+class UserResource extends AbstractResource
 {
 
     /**
