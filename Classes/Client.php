@@ -12,6 +12,7 @@ use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Promise\PromiseInterface;
 use Neos\Flow\Annotations as Flow;
 use GuzzleHttp\HandlerStack;
+use PunktDe\Sylius\Api\Exception\SyliusApiConfigurationException;
 use Sainsburys\Guzzle\Oauth2\GrantType\PasswordCredentials;
 use Sainsburys\Guzzle\Oauth2\GrantType\RefreshToken;
 use Sainsburys\Guzzle\Oauth2\Middleware\OAuthMiddleware;
@@ -53,8 +54,13 @@ class Client
      */
     protected $httpClient;
 
+    /**
+     * @throws SyliusApiConfigurationException
+     */
     public function initializeObject(): void
     {
+        $this->validateConfiguration();
+
         $oauthClientConfig = [
             PasswordCredentials::CONFIG_USERNAME => $this->apiUser,
             PasswordCredentials::CONFIG_PASSWORD => $this->apiPassword,
@@ -163,5 +169,18 @@ class Client
     public function getConfig($option = null)
     {
         return $this->httpClient->getConfig($option);
+    }
+
+    /**
+     * @throws SyliusApiConfigurationException
+     */
+    private function validateConfiguration(): void
+    {
+        $requiredSettingKeys = ['apiUser', 'apiPassword', 'baseUri', 'clientSecret', 'clientId'];
+        foreach ($requiredSettingKeys as $requiredSettingKey) {
+            if (trim($this->$requiredSettingKey) === '') {
+                throw new SyliusApiConfigurationException(sprintf('The required configuration setting %s for the Sylius API was not set or empty', $requiredSettingKeys), 1572349688);
+            }
+        }
     }
 }
