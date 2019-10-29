@@ -8,7 +8,7 @@ namespace PunktDe\Sylius\Api\Dto;
  *  All rights reserved.
  */
 
-class AdminUser implements ApiDtoInterface
+class User implements ApiDtoInterface
 {
     /**
      * @var int
@@ -54,9 +54,9 @@ class AdminUser implements ApiDtoInterface
 
     /**
      * @param int $id
-     * @return AdminUser
+     * @return User
      */
-    public function setId(int $id): AdminUser
+    public function setId(int $id): User
     {
         $this->id = $id;
         return $this;
@@ -72,9 +72,9 @@ class AdminUser implements ApiDtoInterface
 
     /**
      * @param string $username
-     * @return AdminUser
+     * @return User
      */
-    public function setUsername(string $username): AdminUser
+    public function setUsername(string $username): User
     {
         $this->username = $username;
         return $this;
@@ -90,9 +90,9 @@ class AdminUser implements ApiDtoInterface
 
     /**
      * @param string $email
-     * @return AdminUser
+     * @return User
      */
-    public function setEmail(string $email): AdminUser
+    public function setEmail(string $email): User
     {
         $this->email = $email;
         return $this;
@@ -108,9 +108,9 @@ class AdminUser implements ApiDtoInterface
 
     /**
      * @param string $plainPassword
-     * @return AdminUser
+     * @return User
      */
-    public function setPlainPassword(string $plainPassword): AdminUser
+    public function setPlainPassword(string $plainPassword): User
     {
         $this->plainPassword = $plainPassword;
         return $this;
@@ -126,9 +126,9 @@ class AdminUser implements ApiDtoInterface
 
     /**
      * @param string $localeCode
-     * @return AdminUser
+     * @return User
      */
-    public function setLocaleCode(string $localeCode): AdminUser
+    public function setLocaleCode(string $localeCode): User
     {
         $this->localeCode = $localeCode;
         return $this;
