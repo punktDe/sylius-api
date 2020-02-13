@@ -14,7 +14,7 @@ use Neos\Flow\ResourceManagement\Exception as ResourceManagementException;
 use Neos\Utility\Files;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LogLevel;
-use PunktDe\Polyfill\LogEnvironment\Utility\LogEnvironment;
+use Neos\Flow\Log\Utility\LogEnvironment;
 use PunktDe\Sylius\Api\Client;
 use PunktDe\Sylius\Api\Dto\ApiDtoInterface;
 use PunktDe\Sylius\Api\Dto\FileTransferringInterface;
