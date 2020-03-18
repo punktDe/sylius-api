@@ -19,6 +19,7 @@ use Neos\Flow\Reflection\ReflectionService;
 use PunktDe\Sylius\Api\Client;
 use PunktDe\Sylius\Api\Exception\SyliusApiConfigurationException;
 use PunktDe\Sylius\Api\Resource\AbstractResource;
+use PunktDe\Sylius\Api\Resource\ResourceInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
@@ -91,6 +92,7 @@ class SyliusCommandController extends CommandController
             $this->sendAndExit(1);
         }
 
+        /** @var ResourceInterface $resource */
         $resource = $this->objectManager->get($resourceClassName);
         $object = $resource->get($identifier);
 

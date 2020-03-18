@@ -8,6 +8,7 @@ namespace PunktDe\Sylius\Api\Dto;
 
 use Neos\Flow\ResourceManagement\PersistentResource;
 use PunktDe\Sylius\Api\Exception\SyliusApiException;
+use PunktDe\Sylius\Api\Resource\ProductResource;
 use PunktDe\Sylius\Api\Resource\ProductVariantResource;
 use PunktDe\Sylius\Api\ResultCollection;
 use PunktDe\Sylius\Api\Service\DefaultConfiguration;
@@ -20,8 +21,8 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     protected $code;
 
     /**
-    * @var string[]
-    */
+     * @var string[]
+     */
     protected $options = [];
 
     /**
@@ -86,6 +87,40 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     }
 
     /**
+     * @param string $associationType
+     * @return ResultCollection
+     * @throws SyliusApiException
+     */
+    public function getAssociatedProducts(string $associationType): ResultCollection
+    {
+        $productResource = new ProductResource();
+        $associatedProducts = new ResultCollection();
+        foreach ($this->getAssociations() as $association) {
+            $associationCode = $association['type']['code'] ?? '';
+            if ($associationCode === $associationType) {
+                foreach ($association['associatedProducts'] as $associatedProductData) {
+                    $product = $productResource->get($associatedProductData['code']);
+                    if(!$product instanceof Product) {
+                        throw new SyliusApiException(sprintf('No product with code "%s" was found while fetching associatedProducts', $associatedProductData['code']), 1584565022);
+                    }
+                    $associatedProducts->add($product);
+                }
+            }
+        }
+
+        return $associatedProducts;
+    }
+
+
+    /**
+     * @return string[]
+     */
+    public function getAssociations(): array
+    {
+        return $this->associations;
+    }
+
+    /**
      * @return string
      */
     public function getCode(): string
@@ -94,8 +129,8 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     }
 
     /**
-    * @return string[]
-    */
+     * @return string[]
+     */
     public function getOptions(): array
     {
         return $this->options;
@@ -244,15 +279,6 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     {
         $this->code = $code;
         return $this;
-    }
-
-
-    /**
-     * @return string[]
-     */
-    public function getAssociations(): array
-    {
-        return $this->associations;
     }
 
     /**
