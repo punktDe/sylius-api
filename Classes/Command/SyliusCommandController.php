@@ -8,15 +8,21 @@ namespace PunktDe\Sylius\Api\Command;
  *  All rights reserved.
  */
 
+use Exception;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Cli\CommandController;
+use Neos\Flow\Configuration\Exception\InvalidConfigurationTypeException;
+use Neos\Flow\ObjectManagement\Exception\CannotBuildObjectException;
+use Neos\Flow\ObjectManagement\Exception\UnknownObjectException;
 use Neos\Flow\ObjectManagement\ObjectManager;
 use Neos\Flow\Reflection\ReflectionService;
 use PunktDe\Sylius\Api\Client;
 use PunktDe\Sylius\Api\Exception\SyliusApiConfigurationException;
 use PunktDe\Sylius\Api\Resource\AbstractResource;
-use PunktDe\Sylius\Api\Resource\UserResource;
-use PunktDe\Sylius\Api\Resource\ProductResource;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class SyliusCommandController extends CommandController
 {
@@ -32,14 +38,21 @@ class SyliusCommandController extends CommandController
      */
     protected $reflectionService;
 
-    public function testCommand()
+    /**
+     * Automatically call a getAll on all resources and display the count
+     *
+     * @throws InvalidConfigurationTypeException
+     * @throws CannotBuildObjectException
+     * @throws UnknownObjectException
+     */
+    public function testCommand(): void
     {
         $this->outputLine('<b>Testing Sylius Admin API</b>');
 
         try {
             $this->output(str_pad('Testing if the API is properly configured ... ', 50, ' '));
             $client = $this->objectManager->get(Client::class);
-            $this->outputLine('<success>OK</success>');
+            $this->outputLine('<success>OK</success> %s', [$client->getBaseUri()]);
         } catch (SyliusApiConfigurationException $exception) {
             $this->outputLine('<failed>FAILED</failed> (' . $exception->getMessage() . ')');
         }
@@ -56,9 +69,32 @@ class SyliusCommandController extends CommandController
                 $this->output(str_pad($message, 50, ' '));
                 $adminUser = $this->objectManager->get($resourceClass)->getAll();
                 $this->outputLine('<success>OK</success> Found %s items', [$adminUser->count()]);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $this->outputLine('<error>FAILED</error> (' . str_replace("\n", '', $exception->getMessage()) . ')');
             }
         }
+    }
+
+    /**
+     * @param string $resourceType
+     * @param string $identifier
+     * @throws InvalidConfigurationTypeException
+     * @throws CannotBuildObjectException
+     * @throws UnknownObjectException
+     * @throws ExceptionInterface
+     */
+    public function showCommand(string $resourceType, string $identifier): void
+    {
+        $resourceClassName = str_replace('Abstract', ucfirst($resourceType), AbstractResource::class);
+        if (!class_exists($resourceClassName)) {
+            $this->outputLine('No Resource with name %s was found', [ucfirst($resourceType)]);
+            $this->sendAndExit(1);
+        }
+
+        $resource = $this->objectManager->get($resourceClassName);
+        $object = $resource->get($identifier);
+
+        $serializer = new Serializer([new PropertyNormalizer()], [new JsonEncoder()]);
+        print_r($serializer->normalize($object));
     }
 }
