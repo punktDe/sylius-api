@@ -183,4 +183,12 @@ class Client
             }
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getBaseUri(): string
+    {
+        return $this->baseUri;
+    }
 }
