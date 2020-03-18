@@ -358,6 +358,7 @@ abstract class AbstractResource
                 $this->logger->warning(sprintf('Sylius API Request for %s did not succeed. Status: %s Message %s', get_class($this), $response->getStatusCode(), $response->getBody()->getContents()), array_merge($debugData, LogEnvironment::fromMethodName(__METHOD__)));
                 return null;
             }
+
             return $this->serializer->deserialize((string)$response->getBody(), $this->getDtoClass(), 'json');
         };
     }

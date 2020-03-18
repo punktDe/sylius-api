@@ -59,6 +59,14 @@ class Product implements ApiDtoInterface, FileTransferringInterface
      */
     protected $defaultLocale = '';
 
+    /**
+     * Collection of products associated with the created product (for example accessories to this product)
+     *
+     *
+     * @var string[]
+     */
+    protected $associations;
+
     public function __construct()
     {
         $defaultConfiguration = new DefaultConfiguration();
@@ -235,6 +243,25 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     public function setCode(string $code): Product
     {
         $this->code = $code;
+        return $this;
+    }
+
+
+    /**
+     * @return string[]
+     */
+    public function getAssociations(): array
+    {
+        return $this->associations;
+    }
+
+    /**
+     * @param string[] $associations
+     * @return Product
+     */
+    public function setAssociations(array $associations): Product
+    {
+        $this->associations = $associations;
         return $this;
     }
 
