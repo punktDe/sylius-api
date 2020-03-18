@@ -25,7 +25,7 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     protected $options = [];
 
     /**
-     * @var string[]
+     * @var string[][]
      */
     protected $translations = [];
 

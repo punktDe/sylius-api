@@ -130,7 +130,7 @@ class ProductVariant implements ApiDtoInterface
      */
     public function getPrice(?string $channel = null): int
     {
-        return (int)$this->channelPricings[$channel ?? $this->defaultChannel]['price'];
+        return (int)($this->channelPricings[$channel ?? $this->defaultChannel]['price'] ?? 0);
     }
 
     /**
@@ -259,7 +259,8 @@ class ProductVariant implements ApiDtoInterface
      */
     public function getName(string $locale = ''): string
     {
-        return $this->translations[$locale ?: $this->defaultLocale]['name'];
+        $effectiveLocale = $locale ?: $this->defaultLocale;
+        return $this->translations[$effectiveLocale]['name'] ?? '--Product variant not named in locale' . $effectiveLocale;
     }
 
     /**
