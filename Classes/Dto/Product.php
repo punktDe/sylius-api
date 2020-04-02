@@ -36,7 +36,7 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     protected $channels = [];
 
     /**
-     * @var string
+     * @var string[]
      */
     protected $mainTaxon = '';
 
@@ -153,18 +153,18 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getMainTaxon(): string
+    public function getMainTaxon(): array
     {
         return $this->mainTaxon;
     }
 
     /**
-     * @param string $mainTaxon
+     * @param string[] $mainTaxon
      * @return Product
      */
-    public function setMainTaxon(string $mainTaxon): Product
+    public function setMainTaxon(array $mainTaxon): Product
     {
         $this->mainTaxon = $mainTaxon;
         return $this;
