@@ -40,6 +40,21 @@ class ProductVariantResource extends AbstractResource
     }
 
     /**
+     * @param string $identifier
+     * @param string $parentResourceIdentifier
+     * @return mixed
+     * @throws SyliusApiException
+     */
+    public function get(string $identifier, string $parentResourceIdentifier = ''): ?ApiDtoInterface
+    {
+        if ($parentResourceIdentifier === '') {
+            throw new SyliusApiException('The parentResourceIdentifier needs to be given to get the variant of a product', 1585815953);
+        }
+
+        return parent::getAsync($identifier, $parentResourceIdentifier)->wait();
+    }
+
+    /**
      * @param ApiDtoInterface $dto
      * @param mixed[] $files
      * @return PromiseInterface
