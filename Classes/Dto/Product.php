@@ -38,7 +38,7 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     /**
      * @var string[]
      */
-    protected $mainTaxon = '';
+    protected $mainTaxon = [];
 
     /**
      * @var bool
