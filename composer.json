@@ -13,7 +13,7 @@
     "require": {
         "neos/flow": "^5.0 || ^6.0",
         "sainsburys/guzzle-oauth2-plugin": "*",
-        "symfony/serializer": ">=3.0",
+        "symfony/serializer": "^4.0",
         "symfony/property-access": "^4.1"
     },
     "autoload": {
