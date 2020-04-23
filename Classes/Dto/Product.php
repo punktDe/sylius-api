@@ -51,6 +51,11 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     protected $imageTypes = [];
 
     /**
+     * @var string[]
+     */
+    protected $images = [];
+
+    /**
      * @var PersistentResource[]
      */
     protected $uploadResources = [];
@@ -161,6 +166,16 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     }
 
     /**
+     * @param string $locale
+     * @return string
+     */
+    public function getMainTaxonName(string $locale = ''): string
+    {
+        $effectiveLocale = $locale ?: $this->defaultLocale;
+        return $this->mainTaxon['translations'][$effectiveLocale]['name'] ?? '--mainTaxon not named in locale' . $effectiveLocale;
+    }
+
+    /**
      * @param string[] $mainTaxon
      * @return Product
      */
@@ -202,6 +217,26 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     {
         $effectiveLocale = $locale ?: $this->defaultLocale;
         return $this->translations[$effectiveLocale]['name'] ?? '--Product not named in locale' . $effectiveLocale;
+    }
+
+    /**
+     * @param string $locale
+     * @return string
+     */
+    public function getDescription(string $locale = ''): string
+    {
+        $effectiveLocale = $locale ?: $this->defaultLocale;
+        return $this->translations[$effectiveLocale]['description'] ?? '--Product not named in locale' . $effectiveLocale;
+    }
+
+    /**
+     * @param string $locale
+     * @return string
+     */
+    public function getShortDescription(string $locale = ''): string
+    {
+        $effectiveLocale = $locale ?: $this->defaultLocale;
+        return $this->translations[$effectiveLocale]['shortDescription'] ?? '--Product not named in locale' . $effectiveLocale;
     }
 
     /**
@@ -256,19 +291,48 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     }
 
     /**
-     * @return string[]
-     */
-    public function getImages(): array
-    {
-        return $this->imageTypes;
-    }
-
-    /**
      * @return PersistentResource[]
      */
     public function getUploadResources(): array
     {
         return $this->uploadResources;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getImages(): array
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param string $type
+     * @return string
+     */
+    public function getImagePathByType(string $type = 'test'): string
+    {
+        if($this->images === []) {
+            return '';
+        }
+
+        $defaultImagePath = '';
+        $searchedImagePath = '';
+        foreach (array_reverse ($this->images) as $image) {
+            $imagePath = $image['path'] ?? '';
+            if($imagePath === '') {
+                continue;
+            }
+
+            $defaultImagePath = $imagePath;
+            $imageType = $image['type'] ?? '';
+            if($type !== '' && $type === $imageType)
+            {
+                $searchedImagePath = $imagePath;
+            }
+        }
+
+        return $searchedImagePath ?: $defaultImagePath;;
     }
 
     /**
