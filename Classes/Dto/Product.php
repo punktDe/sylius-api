@@ -310,7 +310,7 @@ class Product implements ApiDtoInterface, FileTransferringInterface
      * @param string $type
      * @return string
      */
-    public function getImagePathByType(string $type = 'test'): string
+    public function getImagePathByType(string $type = 'main'): string
     {
         if($this->images === []) {
             return '';
@@ -332,7 +332,7 @@ class Product implements ApiDtoInterface, FileTransferringInterface
             }
         }
 
-        return $searchedImagePath ?: $defaultImagePath;;
+        return $searchedImagePath ?: $defaultImagePath;
     }
 
     /**
