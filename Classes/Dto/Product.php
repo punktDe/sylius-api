@@ -21,6 +21,11 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     protected $code;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @var string[]
      */
     protected $options = [];
@@ -217,6 +222,22 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     {
         $effectiveLocale = $locale ?: $this->defaultLocale;
         return $this->translations[$effectiveLocale]['name'] ?? '--Product not named in locale' . $effectiveLocale;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function setEntityName(): string
+    {
+        return $this->name;
     }
 
     /**
