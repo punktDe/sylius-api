@@ -233,11 +233,12 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     }
 
     /**
-     * @return string
+     * @param string $name
      */
-    public function setEntityName(): string
+    public function setEntityName(string $name): Product
     {
-        return $this->name;
+        $this->name = $name;
+        return $this;
     }
 
     /**
