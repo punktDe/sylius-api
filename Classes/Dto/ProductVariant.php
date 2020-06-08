@@ -260,7 +260,7 @@ class ProductVariant implements ApiDtoInterface
     public function getName(string $locale = ''): string
     {
         $effectiveLocale = $locale ?: $this->defaultLocale;
-        return $this->translations[$effectiveLocale]['name'] ?? '--Product variant not named in locale' . $effectiveLocale;
+        return $this->translations[$effectiveLocale]['name'] ?? $this->getCode();
     }
 
     /**
