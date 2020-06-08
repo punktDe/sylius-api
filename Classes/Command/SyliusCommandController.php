@@ -77,6 +77,8 @@ class SyliusCommandController extends CommandController
     }
 
     /**
+     * Shows the raw result of a given resourceType and identifier
+     *
      * @param string $resourceType
      * @param string $identifier
      * @throws InvalidConfigurationTypeException
@@ -97,6 +99,6 @@ class SyliusCommandController extends CommandController
         $object = $resource->get($identifier);
 
         $serializer = new Serializer([new PropertyNormalizer()], [new JsonEncoder()]);
-        print_r($serializer->normalize($object));
+        $this->output(print_r($serializer->normalize($object), true));
     }
 }
