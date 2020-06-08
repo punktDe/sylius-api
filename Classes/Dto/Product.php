@@ -56,7 +56,7 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     protected $imageTypes = [];
 
     /**
-     * @var string[]
+     * @var string[][]
      */
     protected $images = [];
 
@@ -110,7 +110,7 @@ class Product implements ApiDtoInterface, FileTransferringInterface
             if ($associationCode === $associationType) {
                 foreach ($association['associatedProducts'] as $associatedProductData) {
                     $product = $productResource->get($associatedProductData['code']);
-                    if(!$product instanceof Product) {
+                    if (!$product instanceof Product) {
                         throw new SyliusApiException(sprintf('No product with code "%s" was found while fetching associatedProducts', $associatedProductData['code']), 1584565022);
                     }
                     $associatedProducts->add($product);
@@ -121,6 +121,13 @@ class Product implements ApiDtoInterface, FileTransferringInterface
         return $associatedProducts;
     }
 
+    /**
+     * @return string
+     */
+    public function getDefaultLocale(): string
+    {
+        return $this->defaultLocale;
+    }
 
     /**
      * @return string[]
@@ -199,6 +206,15 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     {
         $this->translations[$locale ?: $this->defaultLocale]['slug'] = $slug;
         return $this;
+    }
+
+    /**
+     * @param string|null $locale
+     * @return string
+     */
+    public function getSlug(?string $locale = null): string
+    {
+        return $this->translations[$locale ?: $this->defaultLocale]['slug'] ?? '';
     }
 
     /**
@@ -334,22 +350,21 @@ class Product implements ApiDtoInterface, FileTransferringInterface
      */
     public function getImagePathByType(string $type = 'main'): string
     {
-        if($this->images === []) {
+        if ($this->images === []) {
             return '';
         }
 
         $defaultImagePath = '';
-        $searchedImagePath = '';
-        foreach (array_reverse ($this->images) as $image) {
+        $searchedImagePath = null;
+        foreach (array_reverse($this->images) as $image) {
             $imagePath = $image['path'] ?? '';
-            if($imagePath === '') {
+            if ($imagePath === '') {
                 continue;
             }
 
             $defaultImagePath = $imagePath;
             $imageType = $image['type'] ?? '';
-            if($type !== '' && $type === $imageType)
-            {
+            if ($type !== '' && $type === $imageType) {
                 $searchedImagePath = $imagePath;
             }
         }
