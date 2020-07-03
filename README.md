@@ -15,6 +15,7 @@ The following Endpoints are currently implemented, see the [admin API documentat
 * Customer
 * Product
 * ProductVariant
+* Order
 * User
 * Zone
 
