@@ -78,6 +78,13 @@ class Product implements ApiDtoInterface, FileTransferringInterface
      */
     protected $associations;
 
+    /**
+     * Collection of attributes associated with this product
+     *
+     * @var string[]
+     */
+    protected $attributes;
+
     public function __construct()
     {
         $defaultConfiguration = new DefaultConfiguration();
@@ -135,6 +142,11 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     public function getAssociations(): array
     {
         return $this->associations;
+    }
+
+    public function getAttributes(): array
+    {
+        return $this->attributes;
     }
 
     /**
