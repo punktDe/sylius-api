@@ -8,14 +8,10 @@ namespace PunktDe\Sylius\Api\Tests\Functional;
  *  All rights reserved.
  */
 
-use Neos\Flow\Log\PsrSystemLoggerInterface;
 use Neos\Flow\Tests\FunctionalTestCase;
-use PunktDe\Sylius\Api\Dto\ApiDtoInterface;
+use Psr\Log\LoggerInterface;
 use PunktDe\Sylius\Api\Dto\Product;
-use PunktDe\Sylius\Api\Dto\ProductResponse;
 use PunktDe\Sylius\Api\Dto\ProductVariant;
-use PunktDe\Sylius\Api\Dto\ProductVariantResponse;
-use PunktDe\Sylius\Api\Exception\SyliusApiException;
 use PunktDe\Sylius\Api\Resource\ProductResource;
 use PunktDe\Sylius\Api\Resource\ProductVariantResource;
 
@@ -38,7 +34,7 @@ class AbstractSyliusApiTest extends FunctionalTestCase
     protected $testProductCode = 'functionalTestProduct';
 
     /**
-     * @var PsrSystemLoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -47,11 +43,11 @@ class AbstractSyliusApiTest extends FunctionalTestCase
      */
     protected $testProductVariantCode = 'functionalTestProductVariant';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->logger = $this->objectManager->get(PsrSystemLoggerInterface::class);
+        $this->logger = $this->objectManager->get(LoggerInterface::class);
 
         $this->products = $this->objectManager->get(ProductResource::class);
         $this->inject($this->products, 'logger', $this->logger);
@@ -60,7 +56,7 @@ class AbstractSyliusApiTest extends FunctionalTestCase
         $this->inject($this->productVariants, 'logger', $this->logger);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
 
         try {
@@ -83,11 +79,12 @@ class AbstractSyliusApiTest extends FunctionalTestCase
      */
     public function fakeTest()
     {
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 
     /**
      * @return Product
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     protected function createProduct(): ?Product
     {
@@ -100,11 +97,11 @@ class AbstractSyliusApiTest extends FunctionalTestCase
 
             $product = $this->products->add($product);
 
-            $this->assertInstanceOf(Product::class, $product);
-            $this->assertEquals($this->testProductCode, $product->getIdentifier());
+            self::assertInstanceOf(Product::class, $product);
+            self::assertEquals($this->testProductCode, $product->getIdentifier());
             return $product;
         } catch (\Exception $exception) {
-            $this->fail($exception->getMessage());
+            self::fail($exception->getMessage());
         }
 
 
@@ -129,7 +126,7 @@ class AbstractSyliusApiTest extends FunctionalTestCase
 
             return $this->productVariants->add($productVariant);
         } catch (\Exception $exception) {
-            $this->fail($exception->getMessage());
+            self::fail($exception->getMessage());
         }
 
     }

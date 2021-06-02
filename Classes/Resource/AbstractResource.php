@@ -10,10 +10,10 @@ use Closure;
 use Neos\Flow\Annotations as Flow;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Promise\PromiseInterface;
-use Neos\Flow\Log\PsrSystemLoggerInterface;
 use Neos\Flow\ResourceManagement\Exception as ResourceManagementException;
 use Neos\Utility\Files;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Neos\Flow\Log\Utility\LogEnvironment;
 use PunktDe\Sylius\Api\Client;
@@ -53,7 +53,7 @@ abstract class AbstractResource implements ResourceInterface
 
     /**
      * @Flow\Inject
-     * @var PsrSystemLoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 

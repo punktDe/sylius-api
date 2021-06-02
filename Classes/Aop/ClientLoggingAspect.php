@@ -10,7 +10,7 @@ namespace PunktDe\Sylius\Api\Aop;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Aop\JoinPointInterface;
-use Neos\Flow\Log\PsrSystemLoggerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @Flow\Aspect
@@ -19,7 +19,7 @@ class ClientLoggingAspect
 {
     /**
      * @Flow\Inject
-     * @var PsrSystemLoggerInterface
+     * @var LoggerInterface
      */
     protected $systemLogger;
 
