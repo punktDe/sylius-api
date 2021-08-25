@@ -79,6 +79,6 @@ class ZoneResource extends AbstractResource
      */
     protected function getDtoClass(): string
     {
-        return Country::class;
+        return Zone::class;
     }
 }
