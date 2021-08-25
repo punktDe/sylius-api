@@ -2,11 +2,18 @@
 
 [![Latest Stable Version](https://poser.pugx.org/punktde/sylius-api/v/stable)](https://packagist.org/packages/punktde/sylius-api) [![Total Downloads](https://poser.pugx.org/punktde/sylius-api/downloads)](https://packagist.org/packages/punktde/sylius-api)
 
-This [Flow](https://flow.neos.io) package provides a programmable interface to the [Sylius Shop](https://sylius.com/) [admin API](https://docs.sylius.com/en/latest/api/introduction.html).
+This [Flow](https://flow.neos.io) package provides a programmable interface to the admin part of the [Sylius Shop](https://sylius.com/) unified [API](https://master.demo.sylius.com/api/v2/docs).
+
+Version compatibility:
+
+|PunktDe.Sylius.Api| Sylius API                |
+|------------------|---------------------------|
+| 1.x              | Admin API of Sylius < 1.9 |
+| 2.x              | API Platform unified API  |
 
 ## Implemented Endpoints
 
-The following Endpoints are currently implemented, see the [admin API documentation](https://docs.sylius.com/en/latest/api/introduction.html) for details:
+The following Endpoints are currently implemented, see the [admin API documentation](https://master.demo.sylius.com/api/v2/docs) for details:
 
 * Cart
 * CartItem
@@ -51,7 +58,7 @@ The installation is done with composer:
         $this->products->get($identifier);
     }
     
-#### Find an existing cart of the currrent logged in user
+#### Find an existing cart of the current logged in user
 
     /**
      * @Flow\Inject

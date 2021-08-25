@@ -19,6 +19,7 @@ use Neos\Flow\Reflection\ReflectionService;
 use PunktDe\Sylius\Api\Client;
 use PunktDe\Sylius\Api\Exception\SyliusApiConfigurationException;
 use PunktDe\Sylius\Api\Resource\AbstractResource;
+use PunktDe\Sylius\Api\Resource\ProductResource;
 use PunktDe\Sylius\Api\Resource\ResourceInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -68,8 +69,8 @@ class SyliusCommandController extends CommandController
             try {
                 $message = sprintf('Testing %s API ... ', $resourceName);
                 $this->output(str_pad($message, 50, ' '));
-                $adminUser = $this->objectManager->get($resourceClass)->getAll();
-                $this->outputLine('<success>OK</success> Found %s items', [$adminUser->count()]);
+                $data = $this->objectManager->get($resourceClass)->getAll();
+                $this->outputLine('<success>OK</success> Found %s items', [$data->count()]);
             } catch (Exception $exception) {
                 $this->outputLine('<error>FAILED</error> (' . str_replace("\n", '', $exception->getMessage()) . ')');
             }

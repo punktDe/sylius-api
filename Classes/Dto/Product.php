@@ -85,6 +85,11 @@ class Product implements ApiDtoInterface, FileTransferringInterface
      */
     protected $attributes;
 
+    /**
+     * @var array
+     */
+    protected array $variants = [];
+
     public function __construct()
     {
         $defaultConfiguration = new DefaultConfiguration();
@@ -92,15 +97,11 @@ class Product implements ApiDtoInterface, FileTransferringInterface
     }
 
     /**
-     * @param array $criteria
-     * @param int $limit
-     * @param array $sorting
-     * @return ResultCollection
-     * @throws SyliusApiException
+     * @return array
      */
-    public function getVariants(array $criteria = [], int $limit = 100, array $sorting = []): ResultCollection
+    public function getVariants(): array
     {
-        return (new ProductVariantResource())->getAll($criteria, $limit, $sorting, $this->getIdentifier());
+        return $this->variants;
     }
 
     /**

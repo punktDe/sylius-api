@@ -120,13 +120,12 @@ abstract class AbstractResource implements ResourceInterface
 
     /**
      * @param string $identifier
-     * @param string $parentResourceIdentifier
      * @return bool
      */
-    public function has(string $identifier, string $parentResourceIdentifier = ''): bool
+    public function has(string $identifier): bool
     {
         try {
-            $result = $this->apiClient->getAsync($this->getSingleEntityUri($identifier, $parentResourceIdentifier))->then($this->responseSucceeded(LogLevel::DEBUG))->wait();
+            $result = $this->apiClient->getAsync($this->getSingleEntityUri($identifier))->then($this->responseSucceeded(LogLevel::DEBUG))->wait();
         } catch (ClientException $exception) {
             return false;
         }
@@ -136,22 +135,20 @@ abstract class AbstractResource implements ResourceInterface
 
     /**
      * @param string $identifier
-     * @param string $parentResourceIdentifier
      * @return mixed
      */
-    public function get(string $identifier, string $parentResourceIdentifier = ''): ?ApiDtoInterface
+    public function get(string $identifier): ?ApiDtoInterface
     {
-        return $this->getAsync($identifier, $parentResourceIdentifier)->wait();
+        return $this->getAsync($identifier)->wait();
     }
 
     /**
      * @param string $identifier
-     * @param string $parentResourceIdentifier
      * @return PromiseInterface
      */
-    protected function getAsync(string $identifier, string $parentResourceIdentifier = ''): PromiseInterface
+    protected function getAsync(string $identifier): PromiseInterface
     {
-        return $this->apiClient->getAsync($this->getSingleEntityUri($identifier, $parentResourceIdentifier))->then($this->responseToDto());
+        return $this->apiClient->getAsync($this->getSingleEntityUri($identifier))->then($this->responseToDto());
     }
 
     /**
@@ -170,22 +167,20 @@ abstract class AbstractResource implements ResourceInterface
      *   <fieldName> => <direction>
      * ]
      *
-     * @param string $parentResourceIdentifier
      * @return ResultCollection
      */
-    public function getAll(array $criteria = [], int $limit = 100, array $sorting = [], string $parentResourceIdentifier = ''): ResultCollection
+    public function getAll(array $criteria = [], int $limit = 100, array $sorting = []): ResultCollection
     {
-        return $this->getAllAsync($criteria, $limit, $sorting, $parentResourceIdentifier)->wait();
+        return $this->getAllAsync($criteria, $limit, $sorting)->wait();
     }
 
     /**
      * @param string[] $criteria
      * @param int $limit
      * @param string[] $sorting
-     * @param string $parentResourceIdentifier
      * @return PromiseInterface
      */
-    protected function getAllAsync(array $criteria, int $limit, array $sorting, string $parentResourceIdentifier = ''): PromiseInterface
+    protected function getAllAsync(array $criteria, int $limit, array $sorting): PromiseInterface
     {
         $queryParameters = [];
         $queryParameters['limit'] = (string)$limit;
@@ -201,62 +196,46 @@ abstract class AbstractResource implements ResourceInterface
             ];
         }
 
-        return $this->apiClient->getAsync($this->getResourceUri($parentResourceIdentifier), $queryParameters)->then($this->responseToCollection());
+        return $this->apiClient->getAsync($this->getResourceUri(), $queryParameters)->then($this->responseToCollection());
     }
 
     /**
      * @param string $identifier
-     * @param string $parentResourceIdentifier
      * @return bool
      */
-    public function delete(string $identifier, string $parentResourceIdentifier = ''): bool
+    public function delete(string $identifier): bool
     {
-        return $this->deleteAsync($identifier, $parentResourceIdentifier)->wait();
+        return $this->deleteAsync($identifier)->wait();
     }
 
     /**
      * @param string $identifier
-     * @param string $parentResourceIdentifier
      * @return PromiseInterface
      */
-    protected function deleteAsync(string $identifier, string $parentResourceIdentifier = ''): PromiseInterface
+    protected function deleteAsync(string $identifier): PromiseInterface
     {
-        return $this->apiClient->deleteAsync($this->getSingleEntityUri($identifier, $parentResourceIdentifier))->then($this->responseSucceeded());
+        return $this->apiClient->deleteAsync($this->getSingleEntityUri($identifier))->then($this->responseSucceeded());
     }
 
     /**
      * @param string $identifier
-     * @param string $parentResourceIdentifier
      * @return string
      */
-    public function getSingleEntityUri(string $identifier, string $parentResourceIdentifier = ''): string
+    public function getSingleEntityUri(string $identifier): string
     {
-        if ($parentResourceIdentifier !== '' && $this->determineParentResourceName() !== '') {
-            return Files::concatenatePaths([
-                $this->getBaseUri(),
-                $this->determineParentResourceName(), $parentResourceIdentifier,
-                $this->determineResourceName(), $identifier
-            ]);
-        } else {
-            return Files::concatenatePaths([$this->getBaseUri(), $this->determineResourceName(), $identifier]);
+        if (str_starts_with($identifier, '/api/')) {
+            return $identifier;
         }
+
+        return Files::concatenatePaths([$this->getBaseUri(), $this->determineResourceName(), $identifier]);
     }
 
     /**
-     * @param string $parentResourceIdentifier
      * @return string
      */
-    public function getResourceUri(string $parentResourceIdentifier = ''): string
+    public function getResourceUri(): string
     {
-        if ($parentResourceIdentifier !== '' && $this->determineParentResourceName() !== '') {
-            return Files::concatenatePaths([
-                    $this->getBaseUri(),
-                    $this->determineParentResourceName(), $parentResourceIdentifier,
-                    $this->determineResourceName()
-                ]) . '/';
-        } else {
-            return Files::concatenatePaths([$this->getBaseUri(), $this->determineResourceName()]) . '/';
-        }
+        return Files::concatenatePaths([$this->getBaseUri(), $this->determineResourceName()]) . '/';
     }
 
     /**
@@ -271,17 +250,9 @@ abstract class AbstractResource implements ResourceInterface
     /**
      * @return string
      */
-    protected function determineParentResourceName(): string
-    {
-        return '';
-    }
-
-    /**
-     * @return string
-     */
     protected function getBaseUri(): string
     {
-        return $this->apiClient->getConfig('base_uri');
+        return $this->apiClient->getConfig('base_uri') . '/api/v2/admin';
     }
 
     /**
@@ -334,12 +305,11 @@ abstract class AbstractResource implements ResourceInterface
             $resultCollection->setPagesTotal($responseArray['pages'] ?? 0);
             $resultCollection->setElementsTotal($responseArray['itemsTotal'] ?? 0);
 
-            if (!isset($responseArray['_embedded']['items']) || !is_array($responseArray['_embedded']['items'])) {
+            if (!is_array($responseArray)) {
                 return $resultCollection;
             }
 
-            foreach ($responseArray['_embedded']['items'] as $itemData) {
-
+            foreach ($responseArray as $itemData) {
                 $resultCollection->add($this->serializer->denormalize($itemData, $this->getDtoClass()));
             }
 
@@ -365,7 +335,6 @@ abstract class AbstractResource implements ResourceInterface
                 $this->logger->warning(sprintf('Sylius API Request for %s did not succeed. Status: %s Message %s', get_class($this), $response->getStatusCode(), $response->getBody()->getContents()), array_merge($debugData, LogEnvironment::fromMethodName(__METHOD__)));
                 return null;
             }
-
             return $this->serializer->deserialize((string)$response->getBody(), $this->getDtoClass(), 'json');
         };
     }

@@ -25,17 +25,15 @@ interface ResourceInterface
 
     /**
      * @param string $identifier
-     * @param string $parentResourceIdentifier
      * @return bool
      */
-    public function has(string $identifier, string $parentResourceIdentifier = ''): bool;
+    public function has(string $identifier): bool;
 
     /**
      * @param string $identifier
-     * @param string $parentResourceIdentifier
      * @return mixed
      */
-    public function get(string $identifier, string $parentResourceIdentifier = ''): ?ApiDtoInterface;
+    public function get(string $identifier): ?ApiDtoInterface;
 
     /**
      * @param array $criteria an array of criterion like:
@@ -53,15 +51,13 @@ interface ResourceInterface
      *   <fieldName> => <direction>
      * ]
      *
-     * @param string $parentResourceIdentifier
      * @return ResultCollection
      */
-    public function getAll(array $criteria = [], int $limit = 100, array $sorting = [], string $parentResourceIdentifier = ''): ResultCollection;
+    public function getAll(array $criteria = [], int $limit = 100, array $sorting = []): ResultCollection;
 
     /**
      * @param string $identifier
-     * @param string $parentResourceIdentifier
      * @return bool
      */
-    public function delete(string $identifier, string $parentResourceIdentifier = ''): bool;
+    public function delete(string $identifier): bool;
 }
