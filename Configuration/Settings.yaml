@@ -1,8 +1,6 @@
 PunktDe:
   Sylius:
     Api:
-      clientId: ''
-      clientSecret: ''
       apiUser: ''
       apiPassword: ''
       baseUri: ''

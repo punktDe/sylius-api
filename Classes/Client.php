@@ -8,29 +8,18 @@ namespace PunktDe\Sylius\Api;
  *  All rights reserved.
  */
 
+use Eljam\GuzzleJwt\JwtMiddleware;
+use Eljam\GuzzleJwt\Manager\JwtManager;
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\TransferException;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise\PromiseInterface;
 use Neos\Flow\Annotations as Flow;
-use GuzzleHttp\HandlerStack;
+use PunktDe\Sylius\Api\Auth\JsonAuthStrategy;
 use PunktDe\Sylius\Api\Exception\SyliusApiConfigurationException;
-use Sainsburys\Guzzle\Oauth2\GrantType\PasswordCredentials;
-use Sainsburys\Guzzle\Oauth2\GrantType\RefreshToken;
-use Sainsburys\Guzzle\Oauth2\Middleware\OAuthMiddleware;
 
 class Client
 {
-    /**
-     * @var string
-     * @Flow\InjectConfiguration(path="clientId")
-     */
-    protected $clientId = '';
-
-    /**
-     * @var string
-     * @Flow\InjectConfiguration(path="clientSecret")
-     */
-    protected $clientSecret = '';
-
     /**
      * @var string
      * @Flow\InjectConfiguration(path="apiUser")
@@ -61,30 +50,37 @@ class Client
     {
         $this->validateConfiguration();
 
-        $oauthClientConfig = [
-            PasswordCredentials::CONFIG_USERNAME => $this->apiUser,
-            PasswordCredentials::CONFIG_PASSWORD => $this->apiPassword,
-            PasswordCredentials::CONFIG_CLIENT_ID => $this->clientId,
-            PasswordCredentials::CONFIG_CLIENT_SECRET => $this->clientSecret,
-            PasswordCredentials::CONFIG_TOKEN_URL => '/api/oauth/v2/token',
-        ];
+        $authStrategy = new JsonAuthStrategy(
+            [
+                'email' => $this->apiUser,
+                'password' => $this->apiPassword,
+                'json_fields' => ['email', 'password'],
+            ]
+        );
 
-        $oauthClient = new HttpClient(['base_uri' => $this->baseUri]);
-        $grantType = new PasswordCredentials($oauthClient, $oauthClientConfig);
-        $refreshToken = new RefreshToken($oauthClient, $oauthClientConfig);
-        $middleware = new OAuthMiddleware($oauthClient, $grantType, $refreshToken);
+        $authClient = new HttpClient(['base_uri' => $this->baseUri]);
 
+        $jwtManager = new JwtManager(
+            $authClient,
+            $authStrategy,
+            null,
+            [
+                'token_url' => '/api/v2/admin/authentication-token',
+            ]
+        );
+
+        // Create a HandlerStack
         $handlerStack = HandlerStack::create();
-        $handlerStack->push($middleware->onBefore());
-        $handlerStack->push($middleware->onFailure(5));
+
+        // Add middleware
+        $handlerStack->push(new JwtMiddleware($jwtManager));
 
         $options = [
             'handler' => $handlerStack,
-            'base_uri' => $this->baseUri . '/api/v1/',
-            'auth' => 'oauth2',
+            'base_uri' => $this->baseUri,
             'http_errors' => false,
             'headers' => [
-                'User-Agent' => 'PunktDe SyliusApi/1.0',
+                'User-Agent' => 'PunktDe SyliusApi/2.0',
                 'Accept' => 'application/json',
             ]
         ];
@@ -176,10 +172,10 @@ class Client
      */
     private function validateConfiguration(): void
     {
-        $requiredSettingKeys = ['apiUser', 'apiPassword', 'baseUri', 'clientSecret', 'clientId'];
+        $requiredSettingKeys = ['apiUser', 'apiPassword', 'baseUri'];
         foreach ($requiredSettingKeys as $requiredSettingKey) {
             if (trim($this->$requiredSettingKey) === '') {
-                throw new SyliusApiConfigurationException(sprintf('The required configuration setting %s for the Sylius API was not set or empty', $requiredSettingKeys), 1572349688);
+                throw new SyliusApiConfigurationException(sprintf('The required configuration setting %s for the Sylius API was not set or empty', $requiredSettingKey), 1572349688);
             }
         }
     }

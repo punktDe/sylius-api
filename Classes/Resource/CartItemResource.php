@@ -44,28 +44,22 @@ class CartItemResource extends AbstractResource
     // phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
     /**
      * @param string $identifier
-     * @param string $parentResourceIdentifier
      * @return ApiDtoInterface|null
      * @throws SyliusApiException
      */
-    public function get(string $identifier, string $parentResourceIdentifier = ''): ?ApiDtoInterface
+    public function get(string $identifier): ?ApiDtoInterface
     {
         throw new SyliusApiException('Get requests on a single item is not possible. Get the cart instead', 1542733038);
     }
-    // phpcs:enable SlevomatCodingStandard.Functions.UnusedParameter
 
     /**
      * @param string $identifier
-     * @param string $parentResourceIdentifier
      * @return bool
      * @throws SyliusApiException
      */
-    public function delete(string $identifier, string $parentResourceIdentifier = ''): bool
+    public function delete(string $identifier): bool
     {
-        if ($parentResourceIdentifier === '') {
-            throw new SyliusApiException('The parentResourceIdentifier (Identifier of the cart) needs to be set', 1542899581);
-        }
-        return parent::delete($identifier, $parentResourceIdentifier);
+        return parent::delete($identifier);
     }
 
     /**
@@ -74,14 +68,6 @@ class CartItemResource extends AbstractResource
     protected function determineResourceName(): string
     {
         return 'items';
-    }
-
-    /**
-     * @return string
-     */
-    protected function determineParentResourceName(): string
-    {
-        return 'carts';
     }
 
     /**
