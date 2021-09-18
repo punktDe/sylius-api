@@ -44,7 +44,8 @@ The installation is done with composer:
 
 #### Find a single product by its identifier
 
-	/**
+```php
+    /**
      * @Flow\Inject
      * @var PunktDe\Sylius\Api\Resource\ProductResource
      */
@@ -57,9 +58,11 @@ The installation is done with composer:
     private function findOneProductByIdentifier(string $identifier): PunktDe\Sylius\Api\Dto\Product {
         $this->products->get($identifier);
     }
-    
+```
+
 #### Find an existing cart of the current logged in user
 
+```php
     /**
      * @Flow\Inject
      * @var PunktDe\Sylius\Api\Resource\CartResource
@@ -80,3 +83,4 @@ The installation is done with composer:
         
         return current($cartCollection);
      }
+```
