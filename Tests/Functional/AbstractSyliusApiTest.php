@@ -77,7 +77,7 @@ class AbstractSyliusApiTest extends FunctionalTestCase
      *
      * @test
      */
-    public function fakeTest()
+    public function fakeTest(): void
     {
         self::assertTrue(true);
     }
@@ -103,8 +103,6 @@ class AbstractSyliusApiTest extends FunctionalTestCase
         } catch (\Exception $exception) {
             self::fail($exception->getMessage());
         }
-
-
     }
 
     /**
@@ -128,6 +126,5 @@ class AbstractSyliusApiTest extends FunctionalTestCase
         } catch (\Exception $exception) {
             self::fail($exception->getMessage());
         }
-
     }
 }

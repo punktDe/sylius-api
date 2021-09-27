@@ -65,7 +65,7 @@ class CartsTest extends AbstractSyliusApiTest
     /**
      * @throws SyliusApiException
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -95,7 +95,7 @@ class CartsTest extends AbstractSyliusApiTest
         $this->secondCustomerIdentifier = (string)($secondCustomer->getIdentifier() ?? '8');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->customerIdentifier !== '') {
             $this->customers->delete($this->customerIdentifier);

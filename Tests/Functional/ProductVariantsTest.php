@@ -18,7 +18,7 @@ class ProductVariantsTest extends AbstractSyliusApiTest
      * @test
      * @throws SyliusApiException
      */
-    public function add()
+    public function add(): void
     {
         $this->createProduct();
         $productVariant = $this->createProductVariant();
@@ -30,7 +30,7 @@ class ProductVariantsTest extends AbstractSyliusApiTest
      * @test
      * @throws SyliusApiException
      */
-    public function has()
+    public function has(): void
     {
         $this->createProduct();
 
