@@ -99,6 +99,11 @@ class SyliusCommandController extends CommandController
         $resource = $this->objectManager->get($resourceClassName);
         $object = $resource->get($identifier);
 
+        if ($object === null) {
+            $this->outputLine(sprintf('The %s with key %s was not found', $resourceType, $identifier));
+            $this->sendAndExit();
+        }
+
         $serializer = new Serializer([new PropertyNormalizer()], [new JsonEncoder()]);
         $this->output(print_r($serializer->normalize($object), true));
     }
