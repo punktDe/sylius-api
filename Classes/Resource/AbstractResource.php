@@ -235,7 +235,7 @@ abstract class AbstractResource implements ResourceInterface
      */
     public function getResourceUri(): string
     {
-        return Files::concatenatePaths([$this->getBaseUri(), $this->determineResourceName()]) . '/';
+        return Files::concatenatePaths([$this->getBaseUri(), $this->determineResourceName()]);
     }
 
     /**
