@@ -17,7 +17,8 @@ class ProductsTest extends UnitTestCase
      */
     protected $products;
 
-    public function setUp() {
+    public function setUp(): void
+    {
         $this->products = $this->getMockBuilder(ProductResource::class)->setMethods(['getBaseUri'])->getMock();
         $this->products->expects($this->any())->method('getBaseUri')->will($this->returnValue('https://shop.punkt.de/api/v1'));
     }
