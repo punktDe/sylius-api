@@ -7,7 +7,6 @@ namespace PunktDe\Sylius\Api\Tests\Unit;
  */
 
 use Neos\Flow\Tests\UnitTestCase;
-use PunktDe\Sylius\Api\Resource\AbstractResource;
 use PunktDe\Sylius\Api\Resource\ProductResource;
 
 class ProductsTest extends UnitTestCase
@@ -20,7 +19,7 @@ class ProductsTest extends UnitTestCase
     public function setUp(): void
     {
         $this->products = $this->getMockBuilder(ProductResource::class)->setMethods(['getBaseUri'])->getMock();
-        $this->products->expects($this->any())->method('getBaseUri')->will($this->returnValue('https://shop.punkt.de/api/v1'));
+        $this->products->method('getBaseUri')->willReturn('https://shop.punkt.de/api/v1');
     }
 
     /**
@@ -28,7 +27,7 @@ class ProductsTest extends UnitTestCase
      */
     public function getResourceUri()
     {
-        $this->assertRegExp('/https:\/\/shop.punkt.de\/api\/v1\/mock_product_.*\//', $this->products->getResourceUri());
+        self::assertMatchesRegularExpression('/https:\/\/shop.punkt.de\/api\/v1\/mock_product_.*/', $this->products->getResourceUri());
     }
 
     /**
@@ -36,6 +35,6 @@ class ProductsTest extends UnitTestCase
      */
     public function getSingleEntityUri()
     {
-        $this->assertRegExp('/https:\/\/shop.punkt.de\/api\/v1\/mock_product.*\/identity/', $this->products->getSingleEntityUri('identity'));
+        self::assertMatchesRegularExpression('/https:\/\/shop.punkt.de\/api\/v1\/mock_product.*\/identity/', $this->products->getSingleEntityUri('identity'));
     }
 }
