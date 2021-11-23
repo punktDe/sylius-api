@@ -13,6 +13,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Neos\Flow\Annotations as Flow;
 use GuzzleHttp\HandlerStack;
 use PunktDe\Sylius\Api\Exception\SyliusApiConfigurationException;
+use Sainsburys\Guzzle\Oauth2\GrantType\GrantTypeBase;
 use Sainsburys\Guzzle\Oauth2\GrantType\PasswordCredentials;
 use Sainsburys\Guzzle\Oauth2\GrantType\RefreshToken;
 use Sainsburys\Guzzle\Oauth2\Middleware\OAuthMiddleware;
@@ -64,9 +65,9 @@ class Client
         $oauthClientConfig = [
             PasswordCredentials::CONFIG_USERNAME => $this->apiUser,
             PasswordCredentials::CONFIG_PASSWORD => $this->apiPassword,
-            PasswordCredentials::CONFIG_CLIENT_ID => $this->clientId,
-            PasswordCredentials::CONFIG_CLIENT_SECRET => $this->clientSecret,
-            PasswordCredentials::CONFIG_TOKEN_URL => '/api/oauth/v2/token',
+            GrantTypeBase::CONFIG_CLIENT_ID => $this->clientId,
+            GrantTypeBase::CONFIG_CLIENT_SECRET => $this->clientSecret,
+            GrantTypeBase::CONFIG_TOKEN_URL => '/api/oauth/v2/token',
         ];
 
         $oauthClient = new HttpClient(['base_uri' => $this->baseUri]);
