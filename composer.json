@@ -12,7 +12,7 @@
         "API Platform"
     ],
     "require": {
-        "neos/flow": "^5.0 || ^6.0 || ^7.0",
+        "neos/flow": "^5.0 || ^6.0 || ^7.0 || ^8.0",
         "symfony/serializer": "^4.0",
         "symfony/property-access": "^4.1",
         "eljam/guzzle-jwt-middleware": "^0.7"
